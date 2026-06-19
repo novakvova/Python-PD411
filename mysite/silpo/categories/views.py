@@ -8,6 +8,8 @@ from django.contrib import messages
 from users.utils import save_custom_image
 from django.conf import settings
 
+import os
+
 # Create your views here.
 
 def category_list(request):
@@ -55,3 +57,40 @@ def category_delete(request, category_id):
             messages.error(request, f'Помилка при видаленні категорії: {str(x)}')
 
     return redirect('categories:list')
+
+def category_edit(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    old_image_name = category.image
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            try:
+                category = form.save(commit=False)
+
+                if 'image' in request.FILES:
+                    image = request.FILES['image']
+
+                    new_image_name = save_custom_image(image, size=(600, 600), folder='categories')
+                    category.image = new_image_name
+
+                    if old_image_name:
+                        old_file_path = os.path.join(settings.BASE_DIR, 'images', 'categories', old_image_name)
+                        if os.path.exists(old_file_path):
+                            os.remove(old_file_path)
+                else:
+                    category.image = old_image_name
+
+                category.save()
+                messages.success(request, 'Категорію успішно оновлено')
+                return redirect('categories:list')
+
+            except Exception as x:
+                messages.error(request, f'Помилка редагування категорії: {str(x)}')
+        else:
+            messages.error(request, 'Виправте помилки у формі')
+    else:
+        form = CategoryForm(instance=category)
+
+    return render(request, 'categories/category_edit.html', {'form': form, 'category': category})
