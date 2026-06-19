@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 
 from categories.forms import CategoryForm
@@ -6,6 +6,7 @@ from categories.models import Category
 from django.contrib import messages
 
 from users.utils import save_custom_image
+from django.conf import settings
 
 # Create your views here.
 
@@ -36,3 +37,21 @@ def category_create(request):
     else:
         form = CategoryForm()
     return render(request, 'categories/category_create.html',{ 'form': form })
+
+def category_delete(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    if request.method == 'POST':
+        try:
+            if category.image:
+                file_path = settings.BASE_DIR / 'images' / 'categories' / category.image
+                if file_path.exists():
+                    file_path.unlink()
+
+            category.delete()
+            messages.success(request, 'Категорію та її зображення успішно видалено')
+
+        except Exception as x:
+            messages.error(request, f'Помилка при видаленні категорії: {str(x)}')
+
+    return redirect('categories:list')
