@@ -77,7 +77,7 @@ py manage.py runserver 9581
 
 ## Working categories Django
 ```
-cd atbmvt
+cd silpo
 py manage.py startapp categories
 py manage.py makemigrations categories
 py manage.py migrate
@@ -86,12 +86,23 @@ py manage.py migrate
 
 ## Working products Django
 ```
-cd atbmvt
+cd silpo
 py manage.py startapp products
 py manage.py makemigrations products
 py manage.py migrate
 py manage.py makemigrations products
 py manage.py migrate
+```
+
+## Seed data Django
+```
+pip install requests
+ 
+pip freeze > requirements.txt
+
+python manage.py seed_data
+
+python manage.py seed_data --clear
 ```
 
 
