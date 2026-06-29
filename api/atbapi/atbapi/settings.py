@@ -137,9 +137,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 STATIC_URL = 'static/'
 
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'DjangoApi',
-    'DESCRIPTION': 'Django REST API',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-}
+# SPECTACULAR_SETTINGS = {
+#     'TITLE': 'DjangoApi',
+#     'DESCRIPTION': 'Django REST API',
+#     'VERSION': '1.0.0',
+#     'SERVE_INCLUDE_SCHEMA': False,
+# }
