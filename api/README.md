@@ -39,6 +39,7 @@ py manage.py runserver 4099
 pip install djangorestframework
 pip install drf-spectacular
 pip install django-cors-headers
+pip install djangorestframework_simplejwt
 ```
 
 ## Clone Project
