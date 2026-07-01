@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import * as z from "zod";
+import {Controller, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 const EyeIcon = ({ open }: { open: boolean }) => open ? (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -22,11 +25,34 @@ const LoginPage = () => {
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setTimeout(() => setLoading(false), 1800);
-    };
+    const formSchema = z.object({
+        email: z
+            .email({ message: "Введіть коректну електронну пошту" }),
+        password: z
+            .string()
+            .min(6, { message: "Пароль повинен містити щонайменше 6 символів" })
+            .max(100, { message: "Пароль занадто довгий" }),
+    });
+
+    const form = useForm<z.infer<typeof formSchema>>({
+       resolver: zodResolver(formSchema),
+       defaultValues: {
+           email: "",
+           password: ""
+       }
+    });
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        console.log("Data is good", data);
+    }
+
+
+
+    // const handleSubmit = (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+    //     setTimeout(() => setLoading(false), 1800);
+    // };
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950
@@ -82,32 +108,42 @@ const LoginPage = () => {
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 
                         {/* Email */}
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                                Електронна пошта
-                            </label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                placeholder="kozak@sich.ua"
-                                required
-                                className="
-                                    w-full px-4 py-2.5 rounded-xl text-sm
-                                    bg-slate-50 dark:bg-slate-800
-                                    border border-slate-200 dark:border-slate-700
-                                    text-slate-900 dark:text-slate-100
-                                    placeholder:text-slate-400 dark:placeholder:text-slate-500
-                                    outline-none
-                                    focus:border-indigo-400 dark:focus:border-indigo-500
-                                    focus:ring-2 focus:ring-indigo-400/20 dark:focus:ring-indigo-500/20
-                                    transition-all duration-200
-                                "
-                            />
-                        </div>
+                        <Controller
+                            name="email"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                                        Електронна пошта
+                                    </label>
+                                    <input
+                                        type="text"
+                                        {...field}
+                                        placeholder="kozak@sich.ua"
+                                        required
+                                        className={`
+                    w-full px-4 py-2.5 rounded-xl text-sm
+                    bg-slate-50 dark:bg-slate-800
+                    border ${fieldState.error ? "border-red-400 dark:border-red-500" : "border-slate-200 dark:border-slate-700"}
+                    text-slate-900 dark:text-slate-100
+                    placeholder:text-slate-400 dark:placeholder:text-slate-500
+                    outline-none
+                    focus:border-indigo-400 dark:focus:border-indigo-500
+                    focus:ring-2 focus:ring-indigo-400/20 dark:focus:ring-indigo-500/20
+                    transition-all duration-200
+                `}
+                                    />
+                                    {fieldState.error && (
+                                        <p className="mt-1.5 text-sm text-red-500 dark:text-red-400">
+                                            {fieldState.error.message}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        />
 
                         {/* Password */}
                         <div>
