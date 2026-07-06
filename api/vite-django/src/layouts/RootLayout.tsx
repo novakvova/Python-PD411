@@ -133,6 +133,18 @@ const RootLayout = () => {
                             >
                                 Увійти
                             </Link>
+
+                            <Link className="hidden md:flex items-center gap-2
+                                px-4 py-2 rounded-xl text-sm font-medium
+                                bg-gradient-to-r from-indigo-500 to-violet-600
+                                text-white shadow-md shadow-indigo-500/30
+                                hover:shadow-indigo-500/50 hover:scale-[1.02]
+                                transition-all duration-200"
+                                  to={"/registration"}
+                            >
+                                Зареєструватись
+                            </Link>
+
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,7 @@ const LoginPage = () => {
     // };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950
+        <div className=" bg-slate-50 dark:bg-slate-950
         flex items-center justify-center px-4 transition-colors duration-300">
 
             {/* Ambient glow */}
@@ -70,25 +70,8 @@ const LoginPage = () => {
             </div>
 
             {/* Card */}
-            <div className="relative w-full max-w-[400px]">
+            <div className="relative w-full max-w-150">
 
-                 {/*Logo mark */}
-                <div className="flex justify-center mb-8">
-                    <Link to="/" className="flex items-center gap-2.5 group select-none">
-                        <div className="
-                            w-10 h-10 rounded-2xl
-                            bg-gradient-to-br from-indigo-500 to-violet-600
-                            flex items-center justify-center
-                            shadow-lg shadow-indigo-500/30
-                            group-hover:scale-105 transition-transform duration-200
-                        ">
-                            <span className="text-white font-bold text-base">К</span>
-                        </div>
-                        <span className="font-semibold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
-                            КозакиApp
-                        </span>
-                    </Link>
-                </div>
 
                 {/* Form card */}
                 <div className="

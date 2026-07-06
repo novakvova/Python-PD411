@@ -1,19 +1,19 @@
-import {type Control, Controller, type FieldPath, type FieldValues } from "react-hook-form";
+import { type Control, Controller, type FieldPath, type FieldValues } from "react-hook-form"
 
 type FormInputProps<T extends FieldValues> = {
-    control: Control<T>;
-    name: FieldPath<T>;
-    label: string;
-    placeholder?: string;
-    type?: React.HTMLInputTypeAttribute;
-};
+    control: Control<T>
+    name: FieldPath<T>
+    label: string
+    placeholder?: string
+    type?: React.HTMLInputTypeAttribute
+}
 
 export function FormInput<T extends FieldValues>({
                                                      control,
                                                      name,
                                                      label,
                                                      placeholder,
-                                                     type = "text",
+                                                     type = "text"
                                                  }: FormInputProps<T>) {
     return (
         <Controller
@@ -54,5 +54,5 @@ export function FormInput<T extends FieldValues>({
                 </div>
             )}
         />
-    );
+    )
 }
