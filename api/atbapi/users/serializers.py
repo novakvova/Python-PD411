@@ -17,13 +17,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
         fields = [
-            'username',
+            'email',
             'password',
         ]
 

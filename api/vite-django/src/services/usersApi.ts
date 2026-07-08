@@ -4,6 +4,7 @@ import type {IUserItem} from "../types/users/IUserItem.ts";
 import type {IUserResponse} from "../types/users/IUserResponse.ts";
 import type {IUserRegistration} from "../types/users/IUserRegistration.ts";
 import type {IUserLogin} from "../types/users/IUserLogin.ts";
+import {serialize} from "object-to-formdata";
 
 export const usersApi = createApi({
     baseQuery: createBaseQuery('users'),
@@ -29,10 +30,11 @@ export const usersApi = createApi({
         }),
         loginUser: builder.mutation<IUserResponse, IUserLogin>({
             query: (userData) => {
+                const formData = serialize(userData)
                 return {
                     url: '/login/',
                     method: 'POST',
-                    body: userData
+                    body: formData
                 }
             }
         })

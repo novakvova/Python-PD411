@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import {Link, useNavigate} from "react-router";
 import * as z from "zod";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {FormInput} from "../components/FormInput.tsx";
+import {useLoginUserMutation} from "../services/usersApi.ts";
 
 const EyeIcon = ({ open }: { open: boolean }) => open ? (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -24,6 +25,10 @@ const LoginPage = () => {
     const [showPass, setShowPass] = useState(false);
     const [loading, ] = useState(false);
 
+    const navigate = useNavigate();
+
+    const [login] = useLoginUserMutation();
+
     const formSchema = z.object({
         email: z
             .email({ message: "Введіть коректну електронну пошту" }),
@@ -42,7 +47,15 @@ const LoginPage = () => {
     });
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        console.log("Data is good", data);
+        try {
+            const response = await login(data).unwrap();
+
+            console.log(response)
+            navigate('/')
+        }
+        catch (error) {
+            console.error(error)
+        }
     }
 
 
