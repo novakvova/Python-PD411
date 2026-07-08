@@ -3,6 +3,7 @@ import random
 from django.db.migrations import serializer
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import CustomUser
@@ -47,6 +48,20 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     parser_classes = [MultiPartParser, FormParser]
+
+    def get_permissions(self):
+        if self.action in ['login', 'registration']:
+            permission_classes = [AllowAny]
+        elif self.action in ['list', 'retrieve']:
+            # тільки авторизовані користувачі можуть бачити список/деталі
+            permission_classes = [IsAuthenticated]
+            # або, якщо хочете взагалі заборонити GET списку всім:
+            # permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
     @action(detail=False, methods=['post'])
     def generate(self, request):
         users = generate_random_users(5)

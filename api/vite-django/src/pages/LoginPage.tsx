@@ -5,6 +5,8 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {FormInput} from "../components/FormInput.tsx";
 import {useLoginUserMutation} from "../services/usersApi.ts";
+import {useAppDispatch} from "../store";
+import {setCredentials} from "../store/authSlice.ts";
 
 const EyeIcon = ({ open }: { open: boolean }) => open ? (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -26,6 +28,8 @@ const LoginPage = () => {
     const [loading, ] = useState(false);
 
     const navigate = useNavigate();
+
+    const dispatch = useAppDispatch();
 
     const [login] = useLoginUserMutation();
 
@@ -49,6 +53,12 @@ const LoginPage = () => {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         try {
             const response = await login(data).unwrap();
+
+            dispatch(setCredentials({
+                access: response.tokens.access,
+                refresh: response.tokens.refresh,
+                username: response.username,
+            }));
 
             console.log(response)
             navigate('/')
